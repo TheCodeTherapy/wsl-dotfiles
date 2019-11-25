@@ -61,9 +61,16 @@ install_basic_packages () {
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
+install_nvm () {
+    msg="# Installing nvm (please wait)..."
+    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+}
+
 choose_fastest_mirror
 update_system
 install_basic_packages
+install_nvm
 
 home_link "bash/bashrc" ".bashrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
