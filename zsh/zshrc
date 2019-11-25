@@ -6,7 +6,7 @@
 export DOTFILES="$HOME/wsl-dotfiles"
 export ZSH="$DOTFILES/zsh/oh-my-zsh"
 
-PATH=$PATH:$HOME/zsh/bin
+PATH=$PATH:$HOME/wsl-dotfiles/zsh/bin
 
 ZSH_THEME="agnoster"
 ENABLE_CORRECTION="true"
