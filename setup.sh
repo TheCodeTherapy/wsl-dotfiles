@@ -68,3 +68,6 @@ install_basic_packages
 home_link "bash/bashrc" ".bashrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
+
+compaudit | xargs chmod g-w,o-w
+
