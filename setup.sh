@@ -69,3 +69,9 @@ home_link "bash/bashrc" ".bashrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
 
+if [[ -f /bin/zsh ]]; then
+    if [ $SHELL != "/bin/zsh" ]; then
+        chsh -s /bin/zsh
+    fi
+fi
+
