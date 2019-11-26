@@ -65,9 +65,20 @@ choose_fastest_mirror
 update_system
 install_basic_packages
 
+cd $ME
+
 home_link "bash/bashrc" ".bashrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
+
+if [[ -f $ME/.nvm/nvm.sh ]]; then
+    source .bashrc
+else
+    mgs="# Installing nvm (please wait)..."
+    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+    source .bashrc
+fi
 
 # if [[ -f /bin/zsh ]]; then
 #     if [ $SHELL != "/bin/zsh" ]; then
