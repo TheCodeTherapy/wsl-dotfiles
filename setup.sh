@@ -61,6 +61,34 @@ install_basic_packages () {
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
+install_nvm () {
+    mgs="# Installing nvm (please wait)..."
+    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+    source $ME/.bashrc
+}
+
+install_node () {
+    if [ -z $NVM_DIR ]; then
+        if [[ -f $ME/.nvm/nvm.sh ]]; then
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+        else
+            install_nvm
+        fi
+        mgs="# Installing NodeJS (please wait)..."
+        echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+        nvm install 12.13.1
+    else
+        if $(nvm --version > /dev/null 2>&1); then
+            mgs="# Installing NodeJS (please wait)..."
+            echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+            nvm install 12.13.1
+        fi
+    fi
+}
+
 choose_fastest_mirror
 update_system
 install_basic_packages
@@ -72,12 +100,16 @@ home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
 
 if [[ -f $ME/.nvm/nvm.sh ]]; then
-    source .bashrc
+    source $ME/.bashrc
 else
-    mgs="# Installing nvm (please wait)..."
+    install_nvm
+fi
+
+if $(node --version > 2>&1); then
+    mgz="NodeJS already installed."
     echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
-    source .bashrc
+else
+    install_node
 fi
 
 # if [[ -f /bin/zsh ]]; then
@@ -85,4 +117,3 @@ fi
 #         chsh -s /bin/zsh
 #     fi
 # fi
-
