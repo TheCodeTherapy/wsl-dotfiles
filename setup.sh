@@ -77,12 +77,12 @@ install_node () {
         else
             install_nvm
         fi
-        mgs="# Installing NodeJS (please wait)..."
+        msg="# Installing NodeJS (please wait)..."
         echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
         nvm install 12.13.1
     else
         if $(nvm --version > /dev/null 2>&1); then
-            mgs="# Installing NodeJS (please wait)..."
+            msg="# Installing NodeJS (please wait)..."
             echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
             nvm install 12.13.1
         fi
