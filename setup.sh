@@ -106,7 +106,7 @@ else
 fi
 
 if $(node --version > /dev/null 2>&1); then
-    mgz="NodeJS already installed."
+    msg="NodeJS already installed."
     echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
 else
     install_node
