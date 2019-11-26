@@ -62,7 +62,7 @@ install_basic_packages () {
 }
 
 install_nvm () {
-    mgs="# Installing nvm (please wait)..."
+    msg="# Installing nvm (please wait)..."
     echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
     source $ME/.bashrc
