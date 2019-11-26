@@ -105,7 +105,7 @@ else
     install_nvm
 fi
 
-if $(node --version > 2>&1); then
+if $(node --version > /dev/null 2>&1); then
     mgz="NodeJS already installed."
     echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
 else
@@ -117,3 +117,4 @@ fi
 #         chsh -s /bin/zsh
 #     fi
 # fi
+
