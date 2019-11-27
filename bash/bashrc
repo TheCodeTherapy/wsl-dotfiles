@@ -89,10 +89,15 @@ fi
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+if [ -f $ME/wsl-dotfiles/bin/lsg ]; then
+    alias ll='lsg -hl'
+    alias la='lsg -hlA'
+else
+    # some more ls aliases
+    alias ll='ls -hl --color=auto'
+    alias la='ls -hlA --color=auto'
+    alias l='ls -CF'
+fi
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -118,6 +123,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
+PATH=$PATH:~/wsl-dotfiles/bin
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
