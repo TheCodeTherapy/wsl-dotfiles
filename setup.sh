@@ -104,6 +104,7 @@ install_basic_packages
 cd $ME
 
 home_link "bash/bashrc" ".bashrc"
+home_link "bash/inputrc" ".inputrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
 
