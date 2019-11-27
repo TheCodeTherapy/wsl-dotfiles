@@ -57,7 +57,7 @@ install_basic_packages () {
     echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
-        ipython3 python3-pip powerline fonts-powerline
+        ipython3 python3-pip powerline fonts-powerline ruby-full
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
