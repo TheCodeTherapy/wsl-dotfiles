@@ -20,11 +20,19 @@ home_link () {
         || ln -s $ME/wsl-dotfiles/$1 $ME/$2
 }
 
+print_success () {
+    echo -e "\n${COLORS[GREEN]}${1}${COLORS[OFF]}\n"
+}
+
+print_fail () {
+    echo -e "\n${COLORS[RED]}${1}${COLORS[OFF]}\n"
+}
+
 GCR="deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
 
 choose_fastest_mirror () {
     msg="# Checking mirrors speed (please wait)..."
-    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    print_success "${msg}"
     fastest=$(curl -s http://mirrors.ubuntu.com/mirrors.txt \
         | xargs -n1 -I {} sh -c 'echo `curl -r 0-102400 -s -w %{speed_download} -o /dev/null {}/ls-lR.gz` {}' \
         | sort -g -r \
@@ -48,22 +56,22 @@ choose_fastest_mirror () {
 
 update_system () {
     msg="# Updating your system (please wait)..."
-    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    print_success "${msg}"
     sudo apt -y update && sudo apt -y upgrade
 }
 
 install_basic_packages () {
     msg="# Installing basic software (please wait)..."
-    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    print_success "${msg}"
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
-        ipython3 python3-pip powerline fonts-powerline ruby-full
+        ipython3 python3-pip python-pip powerline fonts-powerline ruby-full
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
 install_nvm () {
     msg="# Installing nvm (please wait)..."
-    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    print_success "${msg}"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
     source $ME/.bashrc
 }
@@ -78,12 +86,12 @@ install_node () {
             install_nvm
         fi
         msg="# Installing NodeJS (please wait)..."
-        echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+        print_success "${msg}"
         nvm install 12.13.1
     else
         if $(nvm --version > /dev/null 2>&1); then
             msg="# Installing NodeJS (please wait)..."
-            echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+            print_success "${msg}"
             nvm install 12.13.1
         fi
     fi
@@ -107,9 +115,36 @@ fi
 
 if $(node --version > /dev/null 2>&1); then
     msg="NodeJS already installed."
-    echo -e "\n${COLORS[GREEN]}${msg}${COLORS[OFF]}\n"
+    print_success "${msg}"
 else
     install_node
+fi
+
+if [[ -f /usr/local/bin/neovim-ruby-host ]]; then
+    msg="neovim-ruby-host already installed."
+    print_success "${msg}"
+else
+    msg="Installing neovim-ruby-host (please wait)..."
+    print_success "${msg}"
+    sudo gem install neovim
+fi
+
+if $(pip3 show pynvim > /dev/null 2>&1); then
+    msg="PyNvim installed for Python 3."
+    print_success "${msg}"
+else
+    msg="Installing PyNvim installed for Python 3 (please wait)..."
+    print_success "${msg}"
+    sudo pip3 install pynvim
+fi
+
+if $(pip2 show neovim &> /dev/null); then
+    msg="PyNvim installed for Python 2."
+    print_success "${msg}"
+else
+    msg="Installing PyNvim installed for Python 2 (please wait)..."
+    print_success "${msg}"
+    sudo pip2 install neovim
 fi
 
 # if [[ -f /bin/zsh ]]; then
@@ -117,4 +152,3 @@ fi
 #         chsh -s /bin/zsh
 #     fi
 # fi
-
