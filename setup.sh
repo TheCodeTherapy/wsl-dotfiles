@@ -135,7 +135,7 @@ if $(pip3 show pynvim > /dev/null 2>&1); then
 else
     msg="Installing PyNvim installed for Python 3 (please wait)..."
     print_success "${msg}"
-    sudo pip3 install pynvim
+    sudo -H pip3 install pynvim
 fi
 
 if $(pip2 show neovim &> /dev/null); then
@@ -144,7 +144,7 @@ if $(pip2 show neovim &> /dev/null); then
 else
     msg="Installing PyNvim installed for Python 2 (please wait)..."
     print_success "${msg}"
-    sudo pip2 install neovim
+    sudo -H pip2 install neovim
 fi
 
 # if [[ -f /bin/zsh ]]; then
