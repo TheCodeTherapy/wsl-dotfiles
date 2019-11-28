@@ -114,7 +114,7 @@ install_node () {
 }
 
 install_neovim_deps () {
-    if $(find ~ -type d -name neovim > /dev/null 2>&1); then
+    if $(find ~ -type d -name neovim | grep neovim > /dev/null 2>&1); then
         msg="Node neovim provider already installed."
         print_success "${msg}"
     else
