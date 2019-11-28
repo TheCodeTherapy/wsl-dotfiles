@@ -36,6 +36,7 @@ home_link () {
 }
 
 home_link_cfg () {
+    mkdir -p $CFG
     sudo rm -rf $CFG/$1 > /dev/null 2>&1 \
         && ln -s $ME/wsl-dotfiles/$1 $CFG/. \
         || ln -s $ME/wsl-dotfiles/$1 $CFG/.
@@ -147,17 +148,16 @@ install_neovim_deps () {
     fi
 }
 
+cd $ME
+
 choose_fastest_mirror
 update_system
 install_basic_packages
-
-cd $ME
 
 home_link "bash/bashrc" ".bashrc"
 home_link "bash/inputrc" ".inputrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
-home_link_cfg "nvim"
 
 if [[ -f $ME/.nvm/nvm.sh ]]; then
     source $ME/.bashrc
@@ -173,6 +173,8 @@ else
 fi
 
 install_neovim_deps
+
+home_link_cfg "nvim"
 
 # if [[ -f /bin/zsh ]]; then
 #     if [ $SHELL != "/bin/zsh" ]; then
