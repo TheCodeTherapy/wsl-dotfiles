@@ -95,8 +95,14 @@ if [ -f $ME/wsl-dotfiles/bin/lsg ]; then
 fi
 
 # some more ls aliases
-alias ll='ls -hl --color=auto'
-alias la='ls -hlA --color=auto'
+if [ -f $ME/wsl-dotfiles/bin/exa ]; then
+    alias ll='exa -lh --git'
+    alias la='exa -lha --git'
+else
+    alias ll='ls -hl --color=auto'
+    alias la='ls -hlA --color=auto'
+fi
+
 alias l='ls -CF'
 alias vim='nvim'
 

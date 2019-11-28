@@ -157,12 +157,29 @@ install_neovim_deps () {
     fi
 }
 
+install_exa () {
+    if [[ -f $ME/wsl-dotfiles/bin/exa ]]; then
+        msg="Exa already installed."
+        print_success "${msg}"
+    else
+        msg="# Downloading Exa (please wait)..."
+        print_success "${msg}"
+        cd $ME/wsl-dotfiles/bin \
+            && wget https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip \
+            && unzip exa-linux-x86_64-0.9.0.zip \
+            && rm exa-linux-x86_64-0.9.0.zip \
+            && mv exa-linux-x86_64 exa \
+            && cd ..
+    fi
+}
+
 cd $ME
 
 choose_fastest_mirror
 update_system
 install_basic_packages
 install_nvim
+install_exa
 
 home_link "bash/bashrc" ".bashrc"
 home_link "bash/inputrc" ".inputrc"
