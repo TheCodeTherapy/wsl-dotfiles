@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ME="/home/$(whoami)"
+CFG="$ME/.config"
 
 declare -rA COLORS=(
     [RED]=$'\033[0;31m'
@@ -14,18 +15,32 @@ declare -rA COLORS=(
     [OFF]=$'\033[0m'
 )
 
-home_link () {
-    sudo rm -rf $ME/$2 > /dev/null 2>&1 \
-        && ln -s $ME/wsl-dotfiles/$1 $ME/$2 \
-        || ln -s $ME/wsl-dotfiles/$1 $ME/$2
-}
-
 print_success () {
     echo -e "\n${COLORS[GREEN]}${1}${COLORS[OFF]}\n"
 }
 
+print_info () {
+    echo -e "\n${COLORS[CYAN]}${1}${COLORS[OFF]}\n"
+}
+
 print_fail () {
     echo -e "\n${COLORS[RED]}${1}${COLORS[OFF]}\n"
+}
+
+home_link () {
+    sudo rm -rf $ME/$2 > /dev/null 2>&1 \
+        && ln -s $ME/wsl-dotfiles/$1 $ME/$2 \
+        || ln -s $ME/wsl-dotfiles/$1 $ME/$2
+    msg="# Linked $ME/wsl-dotfiles/$1 to -> $ME/$2"
+    print_info "${msg}"
+}
+
+home_link_cfg () {
+    sudo rm -rf $CFG/$1 > /dev/null 2>&1 \
+        && ln -s $ME/wsl-dotfiles/$1 $CFG/. \
+        || ln -s $ME/wsl-dotfiles/$1 $CFG/.
+    msg="# Linked $ME/wsl-dotfiles/$1 to dir -> $CFG/$1"
+    print_info "${msg}"
 }
 
 GCR="deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
@@ -97,6 +112,41 @@ install_node () {
     fi
 }
 
+install_neovim_deps () {
+    if $(find ~ -type d -name neovim > /dev/null 2>&1); then
+        msg="Node neovim provider already installed."
+        print_success "${msg}"
+    else
+        msg="# Installing Node neovim provider (please wait)..."
+        print_success "${msg}"
+        npm install -g neovim
+    fi
+    if $(pip3 show pynvim > /dev/null 2>&1); then
+        msg="PyNvim installed for Python 3."
+        print_success "${msg}"
+    else
+        msg="Installing PyNvim installed for Python 3 (please wait)..."
+        print_success "${msg}"
+        sudo -H pip3 install pynvim
+    fi
+    if $(pip2 show neovim &> /dev/null); then
+        msg="PyNvim installed for Python 2."
+        print_success "${msg}"
+    else
+        msg="Installing PyNvim installed for Python 2 (please wait)..."
+        print_success "${msg}"
+        sudo -H pip2 install neovim
+    fi
+    if [[ -f /usr/local/bin/neovim-ruby-host ]]; then
+        msg="neovim-ruby-host already installed."
+        print_success "${msg}"
+    else
+        msg="Installing neovim-ruby-host (please wait)..."
+        print_success "${msg}"
+        sudo gem install neovim
+    fi
+}
+
 choose_fastest_mirror
 update_system
 install_basic_packages
@@ -107,6 +157,7 @@ home_link "bash/bashrc" ".bashrc"
 home_link "bash/inputrc" ".inputrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
+home_link_cfg "nvim"
 
 if [[ -f $ME/.nvm/nvm.sh ]]; then
     source $ME/.bashrc
@@ -121,32 +172,7 @@ else
     install_node
 fi
 
-if [[ -f /usr/local/bin/neovim-ruby-host ]]; then
-    msg="neovim-ruby-host already installed."
-    print_success "${msg}"
-else
-    msg="Installing neovim-ruby-host (please wait)..."
-    print_success "${msg}"
-    sudo gem install neovim
-fi
-
-if $(pip3 show pynvim > /dev/null 2>&1); then
-    msg="PyNvim installed for Python 3."
-    print_success "${msg}"
-else
-    msg="Installing PyNvim installed for Python 3 (please wait)..."
-    print_success "${msg}"
-    sudo -H pip3 install pynvim
-fi
-
-if $(pip2 show neovim &> /dev/null); then
-    msg="PyNvim installed for Python 2."
-    print_success "${msg}"
-else
-    msg="Installing PyNvim installed for Python 2 (please wait)..."
-    print_success "${msg}"
-    sudo -H pip2 install neovim
-fi
+install_neovim_deps
 
 # if [[ -f /bin/zsh ]]; then
 #     if [ $SHELL != "/bin/zsh" ]; then
