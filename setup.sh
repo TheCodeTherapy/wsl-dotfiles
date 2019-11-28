@@ -77,11 +77,12 @@ update_system () {
 }
 
 install_basic_packages () {
-    msg="# Installing basic software (please wait)..."
+    msg="# Installing basic packages (please wait)..."
     print_success "${msg}"
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
-        ipython3 python3-pip python-pip powerline fonts-powerline ruby-full
+        ipython3 python3-pip python-pip powerline fonts-powerline ruby-full \
+        ttf-ubuntu-font-family fonts-font-awesome
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
