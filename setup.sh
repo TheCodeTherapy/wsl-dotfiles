@@ -113,6 +113,15 @@ install_node () {
     fi
 }
 
+install_nvim () {
+    msg="# Installing latest neovim (please wait)..."
+    print_success "${msg}"
+    sudo add-apt-repository -y ppa:neovim-ppa/stable
+    sudo apt -y update
+    sudo apt -y install neovim python-dev python-pip python3-dev python3-pip neovim
+    sudo apt -y autoremove
+}
+
 install_neovim_deps () {
     if $(find ~ -type d -name neovim | grep neovim > /dev/null 2>&1); then
         msg="Node neovim provider already installed."
@@ -126,7 +135,7 @@ install_neovim_deps () {
         msg="PyNvim installed for Python 3."
         print_success "${msg}"
     else
-        msg="Installing PyNvim installed for Python 3 (please wait)..."
+        msg="# Installing PyNvim installed for Python 3 (please wait)..."
         print_success "${msg}"
         sudo -H pip3 install pynvim
     fi
@@ -134,7 +143,7 @@ install_neovim_deps () {
         msg="PyNvim installed for Python 2."
         print_success "${msg}"
     else
-        msg="Installing PyNvim installed for Python 2 (please wait)..."
+        msg="# Installing PyNvim installed for Python 2 (please wait)..."
         print_success "${msg}"
         sudo -H pip2 install neovim
     fi
@@ -142,7 +151,7 @@ install_neovim_deps () {
         msg="neovim-ruby-host already installed."
         print_success "${msg}"
     else
-        msg="Installing neovim-ruby-host (please wait)..."
+        msg="# Installing neovim-ruby-host (please wait)..."
         print_success "${msg}"
         sudo gem install neovim
     fi
@@ -153,6 +162,7 @@ cd $ME
 choose_fastest_mirror
 update_system
 install_basic_packages
+install_nvim
 
 home_link "bash/bashrc" ".bashrc"
 home_link "bash/inputrc" ".inputrc"
