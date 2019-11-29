@@ -59,11 +59,3 @@ source $ZSH/oh-my-zsh.sh
 
 cd ~
 
-if [[ -f $ME/.nvm/nvm.sh ]]; then
-    export NVM_DIR="~/.nvm"
-    source ~/.nvm/nvm.sh
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-else 
-    echo "Installing nvm... please wait..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | zsh
-fi
