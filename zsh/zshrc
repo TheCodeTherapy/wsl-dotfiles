@@ -9,7 +9,7 @@ export ZSH="$DOTFILES/zsh/oh-my-zsh"
 export ME="/home/$(whoami)"
 PATH=$PATH:$HOME/wsl-dotfiles/zsh/bin
 
-ZSH_THEME="agnoster"
+ZSH_THEME="robbyrussell"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 HIST_STAMPS="yyyy-mm-dd"
