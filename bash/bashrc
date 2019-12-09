@@ -142,5 +142,4 @@ fi
 
 cd $ME
 clear
-neofetch
-
+neofetch --ascii_distro Windows
