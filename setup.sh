@@ -186,6 +186,7 @@ home_link "bash/bashrc" ".bashrc"
 home_link "bash/inputrc" ".inputrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
+home_link "utils/src/pyprompt/pyprompt.py" ".pyprompt.py"
 
 if [[ -f $ME/.nvm/nvm.sh ]]; then
     source $ME/.bashrc
