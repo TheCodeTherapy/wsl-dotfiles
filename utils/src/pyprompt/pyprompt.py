@@ -269,28 +269,33 @@ def dir_info( prompt ):
 
         elements = rsplit(spl_regex, line.replace('\n', ''))
 
-        if len(elements) == 9:
+        try:
 
-            size = int(elements[4])
-            name = elements[8]
-            total += size
+            if len(elements) == 9:
 
-            if rmatch(dir_regex, line):
-                try:
-                    if rmatch(dot_regex, name):
-                        hidden_dirs += 1
-                    else:
-                        visible_dirs += 1
-                except IndexError:
-                    pass
-            else:
-                try:
-                    if rmatch(dot_regex, name):
-                        hidden_files += 1
-                    else:
-                        visible_files += 1
-                except IndexError:
-                    pass
+                size = int(elements[4])
+                name = elements[8]
+                total += size
+
+                if rmatch(dir_regex, line):
+                    try:
+                        if rmatch(dot_regex, name):
+                            hidden_dirs += 1
+                        else:
+                            visible_dirs += 1
+                    except IndexError:
+                        pass
+                else:
+                    try:
+                        if rmatch(dot_regex, name):
+                            hidden_files += 1
+                        else:
+                            visible_files += 1
+                    except IndexError:
+                        pass
+
+        except ValueError:
+            pass
 
     total_files = visible_files + hidden_files
     total_dirs = visible_dirs + hidden_dirs
