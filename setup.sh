@@ -82,7 +82,7 @@ install_basic_packages () {
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
         ipython3 python3-pip python-pip powerline fonts-powerline ruby-full \
-        ttf-ubuntu-font-family fonts-font-awesome
+        ttf-ubuntu-font-family fonts-font-awesome tmux
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
@@ -187,6 +187,8 @@ home_link "bash/inputrc" ".inputrc"
 home_link "zsh/oh-my-zsh" ".oh-my-zsh"
 home_link "zsh/zshrc" ".zshrc"
 home_link "utils/src/pyprompt/pyprompt.py" ".pyprompt.py"
+home_link "tmux/tmux.conf" ".tmux.conf"
+home_link "tmux/tmux.conf.local" ".tmux.conf.local"
 
 if [[ -f $ME/.nvm/nvm.sh ]]; then
     source $ME/.bashrc

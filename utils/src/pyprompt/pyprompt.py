@@ -31,6 +31,7 @@ upper_left_char   = bytes([0xE2, 0x95, 0xAD]).decode("utf-8") # \u256D ╭
 lower_left_char   = bytes([0xE2, 0x95, 0xB0]).decode("utf-8") # \u2570 ╰
 less_than_char    = bytes([0xE2, 0x9D, 0xAE]).decode("utf-8") # \u276E ❮
 greater_than_char = bytes([0xE2, 0x9D, 0xAF]).decode("utf-8") # \u276F ❯
+arrow_char        = bytes([0xE2, 0x96, 0xB7]).decode("utf-8") # \u25B7 ▷
 home_char         = bytes([0xEF, 0x9F, 0x9B]).decode("utf-8") # \uF7DB 
 user_char         = bytes([0xEF, 0x80, 0x87]).decode("utf-8") # \uF007 
 host_char         = bytes([0xEE, 0x82, 0xA2]).decode("utf-8") # \uE0A2 
@@ -578,7 +579,7 @@ def draw_prompt(prompt):
     prompt['string'] += prompt['clock']['string']
     prompt['string'] += rs_escape + "\n"
 
-    prompt['string'] += lower_left_char + line_char + greater_than_char
+    prompt['string'] += lower_left_char + line_char + arrow_char # greater_than_char
     prompt['string'] +=  "{} ".format(rs_escape)
 
     pfs(prompt['string'])
