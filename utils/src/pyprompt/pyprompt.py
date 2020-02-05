@@ -220,7 +220,8 @@ def username( prompt ):
 
 def shorten_path( length, prompt ):
 
-    path = SExec('pwd').stdout.replace("\n", "").replace("/home", "~")
+    home_folder = "/home/{0}".format(prompt['username'])
+    path = SExec('pwd').stdout.replace("\n", "").replace(home_folder, home_char)
 
     while len(path) > length:
         dirs = path.split("/")
