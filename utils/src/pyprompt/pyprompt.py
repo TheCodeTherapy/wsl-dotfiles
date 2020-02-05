@@ -121,10 +121,7 @@ def humanize_bytes( _bytes ):
     for i in range(len(pob)):
         if pob[i - 1][1] <= _bytes < pob[i][1]:
             s = "%.2f %s" % (float(_bytes) / pob[i - 1][1], pob[i - 1][0])
-            if int(s.split(".")[0]) == 1:
-                return s
-            else:
-                return s + "s"
+            return s
 
 
 def color_cube_matrix():
@@ -505,14 +502,10 @@ def draw_clock(prompt, bg_color, fg_color1, fg_color2, fg_color3, next_color):
     clock_dict['string'] += fgs(fg_color3)
     clock_dict['string'] += ":" # 1 char
     clock_dict['string'] += fgs(fg_color2)
-    clock_dict['string'] += now.strftime("%M") # 2 chars
-    clock_dict['string'] += fgs(fg_color3)
-    clock_dict['string'] += ":" # 1 char
-    clock_dict['string'] += fgs(fg_color2)
-    clock_dict['string'] += now.strftime("%S") + " " # 3 chars
+    clock_dict['string'] += now.strftime("%M") + " " # 3 chars
     clock_dict['string'] += bgs(next_color) + fgs(bg_color)
     clock_dict['string'] += "{}".format(sep_right_char) # 1 chars
-    clock_dict['size'] = 13
+    clock_dict['size'] = 10
 
     prompt['clock'] = clock_dict
 
