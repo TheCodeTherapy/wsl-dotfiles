@@ -1,6 +1,4 @@
-## Under development. Please wait. It will be legen... wait for it...
-
-This repository counts with sub-modules.
+## Under development.
 
 Please clone it **to your home folder** with:
 
@@ -15,11 +13,3 @@ cd ~/wsl-files
 ./setup.sh
 ```
 
-... dary
-
-### Some commands required to configure / update neovim:
-* :UpdateRemotePlugins
-* :PlugClean
-* :PlugUpgrade
-* :PlugInstall
-* :PlugUpdate
