@@ -44,8 +44,6 @@ home_link_cfg () {
     print_info "${msg}"
 }
 
-GCR="deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-
 choose_fastest_mirror () {
     msg="# Checking mirrors speed (please wait)..."
     print_success "${msg}"
@@ -81,15 +79,14 @@ install_basic_packages () {
     print_success "${msg}"
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
-        ipython3 python3-pip python-pip powerline fonts-powerline ruby-full \
-        ttf-ubuntu-font-family fonts-font-awesome tmux
+        ipython3 python3-pip python3-dev python-is-python3 tmux
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
 install_nvm () {
     msg="# Installing nvm (please wait)..."
     print_success "${msg}"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
     source $ME/.bashrc
 }
 
@@ -119,43 +116,8 @@ install_nvim () {
     print_success "${msg}"
     sudo add-apt-repository -y ppa:neovim-ppa/stable
     sudo apt -y update
-    sudo apt -y install neovim python-dev python-pip python3-dev python3-pip neovim
+    sudo apt -y install neovim
     sudo apt -y autoremove
-}
-
-install_neovim_deps () {
-    if $(find ~ -type d -name neovim | grep neovim > /dev/null 2>&1); then
-        msg="Node neovim provider already installed."
-        print_success "${msg}"
-    else
-        msg="# Installing Node neovim provider (please wait)..."
-        print_success "${msg}"
-        npm install -g neovim
-    fi
-    if $(pip3 show pynvim > /dev/null 2>&1); then
-        msg="PyNvim installed for Python 3."
-        print_success "${msg}"
-    else
-        msg="# Installing PyNvim installed for Python 3 (please wait)..."
-        print_success "${msg}"
-        sudo -H pip3 install pynvim
-    fi
-    if $(pip2 show neovim &> /dev/null); then
-        msg="PyNvim installed for Python 2."
-        print_success "${msg}"
-    else
-        msg="# Installing PyNvim installed for Python 2 (please wait)..."
-        print_success "${msg}"
-        sudo -H pip2 install neovim
-    fi
-    if [[ -f /usr/local/bin/neovim-ruby-host ]]; then
-        msg="neovim-ruby-host already installed."
-        print_success "${msg}"
-    else
-        msg="# Installing neovim-ruby-host (please wait)..."
-        print_success "${msg}"
-        sudo gem install neovim
-    fi
 }
 
 install_exa () {
@@ -184,11 +146,6 @@ install_exa
 
 home_link "bash/bashrc" ".bashrc"
 home_link "bash/inputrc" ".inputrc"
-home_link "zsh/oh-my-zsh" ".oh-my-zsh"
-home_link "zsh/zshrc" ".zshrc"
-home_link "utils/src/pyprompt/pyprompt.py" ".pyprompt.py"
-home_link "tmux/tmux.conf" ".tmux.conf"
-home_link "tmux/tmux.conf.local" ".tmux.conf.local"
 
 if [[ -f $ME/.nvm/nvm.sh ]]; then
     source $ME/.bashrc
@@ -203,12 +160,3 @@ else
     install_node
 fi
 
-install_neovim_deps
-
-home_link_cfg "nvim"
-
-# if [[ -f /bin/zsh ]]; then
-#     if [ $SHELL != "/bin/zsh" ]; then
-#         chsh -s /bin/zsh
-#     fi
-# fi
