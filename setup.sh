@@ -101,12 +101,12 @@ install_node () {
         fi
         msg="# Installing NodeJS (please wait)..."
         print_success "${msg}"
-        nvm install 12.13.1
+        nvm install 12.19.0
     else
         if $(nvm --version > /dev/null 2>&1); then
             msg="# Installing NodeJS (please wait)..."
             print_success "${msg}"
-            nvm install 12.13.1
+            nvm install 12.19.0
         fi
     fi
 }
