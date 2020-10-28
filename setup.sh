@@ -111,6 +111,51 @@ install_node () {
     fi
 }
 
+install_yarn_package () {
+    if $(yarn --version > /dev/null 2>&1); then
+        msg="Yarn already installed."
+        print_success "${msg}"
+    else
+        msg="Installing Yarn package..."
+        print_info "${msg}"
+        sudo apt update && sudo apt install yarn
+    fi
+}
+
+install_yarn () {
+    msg="Installing Yarn..."
+    print_info "${msg}"
+    if $(APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 apt-key list | grep "Yarn Packaging" > /dev/null 2>&1); then
+        msg="Yarn GPG key already added to system."
+        print_success "${msg}"
+    else
+        msg="Adding Yarn GPG key to system..."
+        print_info "${msg}"
+        curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    fi
+    if [[ -f /etc/apt/sources.list.d/yarn.list ]]; then
+        msg="Yarn sources list already added to system."
+        print_success "${msg}"
+        install_yarn_package
+    else
+        msg="Adding yarn.list to sources.list.d..."
+        print_info "${msg}"
+        echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+        install_yarn_package
+    fi
+}
+
+install_awscli () {
+    if $(aws --version > /dev/null 2>&1); then
+        msg="AWS CLI already installed."
+        print_success "${msg}"
+    else
+        msg="Installing AWS CLI..."
+        print_info "${msg}"
+        pip3 install awscli --upgrade --user
+    fi
+}
+
 install_nvim () {
     msg="# Installing latest neovim (please wait)..."
     print_success "${msg}"
@@ -143,6 +188,8 @@ update_system
 install_basic_packages
 install_nvim
 install_exa
+install_yarn
+install_awscli
 
 home_link "bash/bashrc" ".bashrc"
 home_link "bash/inputrc" ".inputrc"
@@ -159,4 +206,3 @@ if $(node --version > /dev/null 2>&1); then
 else
     install_node
 fi
-
