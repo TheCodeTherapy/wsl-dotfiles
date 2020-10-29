@@ -1,7 +1,10 @@
 #!/bin/bash
+set -eu -o pipefail
 
 ME="/home/$(whoami)"
 CFG="$ME/.config"
+DOTDIR="${ME}/wsl-dotfiles"
+BINDIR="${DOTDIR}/bin"
 
 declare -rA COLORS=(
     [RED]=$'\033[0;31m'
@@ -29,18 +32,18 @@ print_fail () {
 
 home_link () {
     sudo rm -rf $ME/$2 > /dev/null 2>&1 \
-        && ln -s $ME/wsl-dotfiles/$1 $ME/$2 \
-        || ln -s $ME/wsl-dotfiles/$1 $ME/$2
-    msg="# Linked $ME/wsl-dotfiles/$1 to -> $ME/$2"
+        && ln -s $DOTDIR/$1 $ME/$2 \
+        || ln -s $DOTDIR/$1 $ME/$2
+    msg="# Linked $DOTDIR/$1 to -> $ME/$2"
     print_info "${msg}"
 }
 
 home_link_cfg () {
     mkdir -p $CFG
     sudo rm -rf $CFG/$1 > /dev/null 2>&1 \
-        && ln -s $ME/wsl-dotfiles/$1 $CFG/. \
-        || ln -s $ME/wsl-dotfiles/$1 $CFG/.
-    msg="# Linked $ME/wsl-dotfiles/$1 to dir -> $CFG/$1"
+        && ln -s $DOTDIR/$1 $CFG/. \
+        || ln -s $DOTDIR/$1 $CFG/.
+    msg="# Linked $DOTDIR/$1 to dir -> $CFG/$1"
     print_info "${msg}"
 }
 
@@ -166,13 +169,13 @@ install_nvim () {
 }
 
 install_exa () {
-    if [[ -f $ME/wsl-dotfiles/bin/exa ]]; then
+    if [[ -f $BINDIR/exa ]]; then
         msg="Exa already installed."
         print_success "${msg}"
     else
         msg="# Downloading Exa (please wait)..."
         print_success "${msg}"
-        cd $ME/wsl-dotfiles/bin \
+        cd $BINDIR \
             && wget https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip \
             && unzip exa-linux-x86_64-0.9.0.zip \
             && rm exa-linux-x86_64-0.9.0.zip \
@@ -191,8 +194,11 @@ install_exa
 install_yarn
 install_awscli
 
-home_link "bash/bashrc" ".bashrc"
-home_link "bash/inputrc" ".inputrc"
+home_link "bash/bashrc.sh" ".bashrc"
+home_link "bash/inputrc.sh" ".inputrc"
+home_link "tmux/tmux.conf" ".tmux.conf"
+home_link "tmux/tmux.conf.local" ".tmux.conf.local"
+home_link "tmux/tmux.help" ".tmux.help"
 
 if [[ -f $ME/.nvm/nvm.sh ]]; then
     source $ME/.bashrc
