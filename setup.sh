@@ -121,7 +121,7 @@ install_yarn_package () {
     else
         msg="Installing Yarn package..."
         print_info "${msg}"
-        sudo apt update && sudo apt install yarn
+        sudo apt update && sudo apt -y install yarn
     fi
 }
 
