@@ -89,7 +89,7 @@ install_basic_packages () {
 install_nvm () {
     msg="# Installing nvm (please wait)..."
     print_success "${msg}"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
     source $ME/.bashrc
 }
 
@@ -104,12 +104,12 @@ install_node () {
         fi
         msg="# Installing NodeJS (please wait)..."
         print_success "${msg}"
-        nvm install 12.19.0
+        nvm install 14.16.0
     else
         if $(nvm --version > /dev/null 2>&1); then
             msg="# Installing NodeJS (please wait)..."
             print_success "${msg}"
-            nvm install 12.19.0
+            nvm install 14.16.0
         fi
     fi
 }
