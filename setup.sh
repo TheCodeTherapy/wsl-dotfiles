@@ -86,6 +86,7 @@ choose_fastest_mirror () {
 update_system () {
     msg="# Updating your system (please wait)..."
     print_green "${msg}"
+    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
     sudo apt -y update && sudo apt -y upgrade
 }
 
