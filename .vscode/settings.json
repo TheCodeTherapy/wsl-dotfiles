@@ -1,0 +1,15 @@
+{
+  "editor.tabSize": 2,
+    "editor.rulers": [79, 102],
+    "editor.fontSize": 21,
+    "editor.fontFamily": "'FiraCode Nerd Font', 'Ubuntu Mono Regular', 'Iosevka Custom', 'FiraCode Nerd Font', 'Fira Code', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+    "editor.fontLigatures": true,
+    "editor.letterSpacing": -1.0,
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [{
+            "scope": "comment",
+            "settings": { "fontStyle": "" }
+        }]
+    },
+  "workbench.colorTheme": "Tokyo Night"
+}

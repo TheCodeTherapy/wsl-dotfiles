@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+        "bungcip.better-toml",
+        "dbaeumer.vscode-eslint",
+        "dlasagno.rasi",
+        "eamodio.gitlens",
+        "enkia.tokyo-night",
+        "Equinusocio.vsc-material-theme",
+        "Equinusocio.vsc-community-material-theme",
+        "equinusocio.vsc-material-theme-icons",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers",
+        "ms-vscode.powershell",
+        "slevesque.shader",
+        "ms-vscode.cpptools"
+    ]
+  }
