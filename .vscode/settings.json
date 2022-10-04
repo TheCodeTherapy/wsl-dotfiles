@@ -1,15 +1,46 @@
 {
   "editor.tabSize": 2,
-    "editor.rulers": [79, 102],
-    "editor.fontSize": 21,
-    "editor.fontFamily": "'FiraCode Nerd Font', 'Ubuntu Mono Regular', 'Iosevka Custom', 'FiraCode Nerd Font', 'Fira Code', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
-    "editor.fontLigatures": true,
-    "editor.letterSpacing": -1.0,
-    "editor.tokenColorCustomizations": {
-        "textMateRules": [{
-            "scope": "comment",
-            "settings": { "fontStyle": "" }
-        }]
-    },
-  "workbench.colorTheme": "Tokyo Night"
+  "editor.rulers": [120],
+  "editor.detectIndentation": false,
+  "search.exclude": {
+    "package-lock.json": true
+  },
+  // "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // "editor.formatOnSave": true,
+  // "editor.codeActionsOnSave": ["source.fixAll.eslint"],
+  // "jest.autoRun": {
+  //   "watch": false, // true would run the test suit when saving a file
+  //   "onStartup": ["all-tests"] // Run all tests upon project launch
+  // },
+  // "jest.showCoverageOnLoad": false, // Don't show code coverage when launched
+  // "jest.showTerminalOnLaunch": true, // Automatically open test terminal on launch
+  // "[json][jsonc]": {
+  //   "editor.formatOnSave": true,
+  //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // },
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "comment",
+        "settings": { "fontStyle": "" }
+      }
+    ]
+  },
+  "workbench.colorCustomizations": {
+    "editor.background": "#161619",
+    "editor.lineHighlightBackground": "#202020",
+    "editor.lineHighlightBorder": "#FFFFFF03",
+    "activityBar.background": "#121212",
+    "list.activeSelectionBackground": "#4477FF",
+    "tree.indentGuidesStroke": "#DDDDFF",
+    "sideBar.background": "#090909",
+    "sideBarSectionHeader.border": "#AAAAAA",
+    "minimap.foregroundOpacity": "#000000FF",
+    "minimap.background": "#121212FF"
+  },
+  "workbench.tree.indent": 20,
+  "explorer.compactFolders": false,
+  "editor.fontLigatures": false,
+  "editor.fontFamily": "'FiraCode Nerd Font', Consolas, 'Courier New', monospace",
+  "editor.fontSize": 19
 }

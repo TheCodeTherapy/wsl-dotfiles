@@ -210,7 +210,7 @@ cd $ME
 update_system
 install_basic_packages
 install_nvim
-install_exa
+# install_exa
 install_yarn
 install_awscli
 
