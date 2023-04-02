@@ -1,10 +1,10 @@
-## Under development.
+# WSL2 Dotfiles
 
 Please clone it **to your home folder** with:
 
 ```
 cd ~
-git clone --recurse-submodules https://github.com/mgzme/wsl-dotfiles.git
+git clone https://github.com/TheCodeTherapy/wsl-dotfiles.git
 ```
 
 ... and then run the setup script with:
@@ -12,4 +12,3 @@ git clone --recurse-submodules https://github.com/mgzme/wsl-dotfiles.git
 cd ~/wsl-files
 ./setup.sh
 ```
-

@@ -58,35 +58,10 @@ home_link_cfg () {
     print_cyan "${msg}"
 }
 
-choose_fastest_mirror () {
-    msg="# Checking mirrors speed (please wait)..."
-    print_green "${msg}"
-    fastest=$(curl -s http://mirrors.ubuntu.com/mirrors.txt \
-        | xargs -n1 -I {} sh -c 'echo `curl -r 0-102400 -s -w %{speed_download} -o /dev/null {}/ls-lR.gz` {}' \
-        | sort -g -r \
-        | head -1 \
-        | awk '{ print $2 }')
-    echo $fastest
-    cn=$(lsb_release -cs)
-    mirror="deb $fastest"
-    list="$mirror $cn main restricted"
-    list="$list\n$mirror $cn-updates main restricted"
-    list="$list\n$mirror $cn universe"
-    list="$list\n$mirror $cn-updates universe"
-    list="$list\n$mirror $cn multiverse"
-    list="$list\n$mirror $cn-updates multiverse"
-    list="$list\n$mirror $cn-backports main restricted universe multiverse"
-    list="$list\n$mirror $cn-security main restricted"
-    list="$list\n$mirror $cn-security universe"
-    list="$list\n$mirror $cn-security multiverse"
-    # echo -e $list | sudo tee /etc/apt/sources.list
-    echo -e $list
-}
-
 update_system () {
     msg="# Updating your system (please wait)..."
     print_green "${msg}"
-    echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
+    # echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
     sudo apt -y update && sudo apt -y upgrade
 }
 
@@ -95,7 +70,9 @@ install_basic_packages () {
     print_green "${msg}"
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
-        ipython3 python3-pip python3-dev python-is-python3 tmux
+        ipython3 python3-pip python3-dev python-is-python3 tmux ffmpeg \
+		plocate
+	sudo updatedb
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
@@ -105,7 +82,7 @@ install_nvm () {
     if [[ -f $NVMDIR/nvm.sh ]]; then
         print_green "nvm already installed."
     else
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
     fi
 }
 
@@ -129,40 +106,21 @@ install_node () {
     fi
 }
 
-install_yarn_package () {
+install_pnpm () {
+    msg="INSTALLING PNPM ..."
+    print_yellow "${msg}"
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
+}
+
+install_yarn () {
     if $(yarn --version > /dev/null 2>&1); then
         msg="Yarn already installed."
         print_green "${msg}"
     else
-        msg="Installing Yarn package..."
+        msg="Installing Yarn..."
         print_yellow "${msg}"
-        sudo apt update && sudo apt -y install yarn
-    fi
-}
-
-install_yarn () {
-    msg="Installing Yarn..."
-    print_yellow "${msg}"
-    if [[ -f /etc/apt/trusted.gpg.d/yarn.gpg ]]; then
-        msg="Yarn GPG key already added to system."
-        print_green "${msg}"
-    else
-        msg="Adding Yarn GPG key to system..."
-        print_yellow "${msg}"
-        curl https://dl.yarnpkg.com/debian/pubkey.gpg \
-            | gpg --dearmor \
-            | sudo tee /etc/apt/trusted.gpg.d/yarn.gpg > /dev/null
-    fi
-    if [[ -f /etc/apt/sources.list.d/yarn.list ]]; then
-        msg="Yarn sources list already added to system."
-        print_green "${msg}"
-        install_yarn_package
-    else
-        msg="Adding yarn.list to sources.list.d..."
-        print_yellow "${msg}"
-        echo "deb https://dl.yarnpkg.com/debian/ stable main" \
-            | sudo tee /etc/apt/sources.list.d/yarn.list
-        install_yarn_package
+        corepack enable
+        corepack prepare yarn@stable --activate
     fi
 }
 
@@ -206,13 +164,12 @@ install_exa () {
 
 cd $ME
 
-# choose_fastest_mirror
 update_system
 install_basic_packages
-install_nvim
-# install_exa
 install_yarn
 install_awscli
+install_nvim
+install_exa
 
 home_link "bash/bashrc.sh" ".bashrc"
 home_link "bash/inputrc.sh" ".inputrc"
@@ -231,4 +188,11 @@ if $(node --version > /dev/null 2>&1); then
     print_green "${msg}"
 else
     install_node
+fi
+
+if $(pnpm --version > /dev/null 2>&1); then
+    msg="PNPM already installed."
+    print_green "${msg}"
+else
+    install_pnpm
 fi
