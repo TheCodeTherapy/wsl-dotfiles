@@ -71,7 +71,7 @@ install_basic_packages () {
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
         ipython3 python3-pip python3-dev python-is-python3 tmux ffmpeg \
-		plocate
+		plocate wget
 	sudo updatedb
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
@@ -170,6 +170,8 @@ install_yarn
 install_awscli
 install_nvim
 install_exa
+
+wget https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Meslo/M/Regular/complete/Meslo%20LG%20M%20Regular%20Nerd%20Font%20Complete%20Windows%20Compatible.ttf
 
 home_link "bash/bashrc.sh" ".bashrc"
 home_link "bash/inputrc.sh" ".inputrc"
