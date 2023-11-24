@@ -71,7 +71,7 @@ install_basic_packages () {
     sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
         automake cmake cmake-data pkg-config clang git neovim zsh python3 \
         ipython3 python3-pip python3-dev python-is-python3 tmux ffmpeg \
-		    wget dialog
+		    wget dialog ninja-build gettext curl
     rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 }
 
