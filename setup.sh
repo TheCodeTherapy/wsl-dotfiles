@@ -143,6 +143,17 @@ install_nvim () {
     sudo apt -y autoremove
 }
 
+install_latest_nvim() {
+    msg="# Installing latest neovim (please wait)..."
+    print_green "${msg}"
+    c="$(lscpu -p | grep -v '#' | wc -l)"
+    cd $ME
+    git clone https://github.com/neovim/neovim.git
+    cd neovim
+    git checkout v0.9.4
+    make -j$c CMAKE_BUILD_TYPE=Release
+}
+
 install_exa () {
     if [[ -f $BINDIR/exa ]]; then
         msg="Exa already installed."
@@ -166,7 +177,8 @@ cd $ME
 update_system
 install_basic_packages
 install_awscli
-install_nvim
+#install_nvim
+install_latest_nvim
 install_exa
 
 home_link "bash/bashrc.sh" ".bashrc"
