@@ -1,0 +1,16 @@
+#!/bin/bash
+for file in *.webp; do
+    # Check if file exists (in case there are no .webp files in the directory)
+    if [[ -f $file ]]; then
+        # Extract the filename without the extension
+        filename="${file%.webp}"
+        # Convert the .webp image to .jpg
+        convert "$file" "$filename.jpg"
+        # If conversion was successful, delete the original .webp file
+        if [[ $? -eq 0 ]]; then
+            rm -f "$file"
+        else
+            echo "Error converting $file"
+        fi
+    fi
+done

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Check if an argument is provided
+if [ -z "$1" ]; then
+    echo "Please provide an input MP4 file."
+    exit 1
+fi
+
+# Extract the filename without extension
+filename="${1%.*}"
+
+# Run ffmpeg conversion
+ffmpeg \
+    -y -i "$1" \
+    -filter_complex \
+    "fps=15,scale=640:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=64[p];[s1][p]paletteuse=dither=bayer" \
+    -loop 1 "${filename}.gif"

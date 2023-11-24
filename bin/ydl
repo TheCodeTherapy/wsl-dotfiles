@@ -1,0 +1,8 @@
+#!/bin/bash
+# yt-dlp -N 8 -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -i -o "%(uploader)s/%(title)s - (%(duration)ss).%(ext)s" --write-sub --all-subs --convert-subs srt --write-thumbnail $1
+yt-dlp -N 8 -i -o "%(uploader)s/%(title)s - (%(duration>%H:%M:%S)s).%(ext)s" \
+    --write-subs \
+    --write-auto-subs \
+    --sub-format srt \
+    --sub-langs "en.*" \
+    --write-thumbnail $1
