@@ -208,3 +208,5 @@ else
 fi
 
 install_yarn
+
+sudo usermod -s /usr/bin/zsh $(whoami)
