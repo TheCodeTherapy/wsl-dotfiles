@@ -178,7 +178,7 @@ update_system
 install_basic_packages
 install_awscli
 #install_nvim
-install_latest_nvim
+# install_latest_nvim
 install_exa
 
 home_link "bash/bashrc.sh" ".bashrc"
@@ -187,25 +187,25 @@ home_link "tmux/tmux.conf" ".tmux.conf"
 home_link "tmux/tmux.conf.local" ".tmux.conf.local"
 home_link "tmux/tmux.help" ".tmux.help"
 
-if [[ -f $ME/.nvm/nvm.sh ]]; then
-    source $ME/.bashrc
-else
-    install_nvm
-fi
+# if [[ -f $ME/.nvm/nvm.sh ]]; then
+#     source $ME/.bashrc
+# else
+#     install_nvm
+# fi
 
-if $(node --version > /dev/null 2>&1); then
-    msg="NodeJS already installed."
-    print_green "${msg}"
-else
-    install_node
-fi
+# if $(node --version > /dev/null 2>&1); then
+#     msg="NodeJS already installed."
+#     print_green "${msg}"
+# else
+#     install_node
+# fi
 
-if $(pnpm --version > /dev/null 2>&1); then
-    msg="PNPM already installed."
-    print_green "${msg}"
-else
-    install_pnpm
-fi
+# if $(pnpm --version > /dev/null 2>&1); then
+#     msg="PNPM already installed."
+#     print_green "${msg}"
+# else
+#     install_pnpm
+# fi
 
 install_yarn
 
