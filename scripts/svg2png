@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <directory>"
+  exit 1
+fi
+
+DIR=$1
+
+if [ ! -d "$DIR" ]; then
+  echo "Error: $DIR is not a valid directory."
+  exit 1
+fi
+
+for svg_file in "$DIR"/*.svg; do
+  if [ ! -e "$svg_file" ]; then
+    echo "No SVG files found in $DIR."
+    exit 0
+  fi
+
+  base_name=$(basename "$svg_file" .svg)
+  rsvg-convert -o "$DIR/$base_name.png" "$svg_file"
+  echo "Converted $svg_file to $DIR/$base_name.png"
+done
+
+echo "All SVG files in $DIR have been converted to PNG."

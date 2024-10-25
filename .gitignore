@@ -1,3 +1,9 @@
-plugged/
-exa-10.0.1/
-exa
+.env
+neovim
+build
+backup
+packages.microsoft.gpg
+temp
+yt-dlp
+depot_tools
+plugged

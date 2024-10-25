@@ -1,0 +1,94 @@
+{
+  "editor.tabSize": 2,
+  "editor.fontSize": 16,
+  "editor.fontFamily": "'NotoMono Nerd Font', 'MesloLGS NF'",
+  "editor.fontLigatures": false,
+  "window.titleBarStyle": "custom",
+
+  "editor.renderWhitespace": "none",
+  "workbench.colorTheme": "TheCodeTheme Dark",
+  "workbench.iconTheme": "catppuccin-mocha",
+
+  "editor.semanticHighlighting.enabled": true,
+
+  "terminal.integrated.minimumContrastRatio": 1,
+  "terminal.integrated.fontSize": 16,
+  "window.customTitleBarVisibility": "auto",
+
+  "gopls": {
+    "ui.semanticTokens": true
+  },
+  "files.associations": {
+    "**/.i3/config": "i3",
+    "**/i3/config": "i3"
+  },
+  "workbench.colorCustomizations": {
+    // "editor.background": "#171721",
+    // "activityBar.background": "#121217",
+    // "activityBar.foreground": "#888888",
+    // "activityBarBadge.background": "#aaaaff",
+    // "minimap.background": "#171721",
+    // "sideBar.background": "#121217",
+    // "statusBar.background": "#121217",
+    // "sideBarSectionHeader.background": "#121217",
+    // "tab.activeBorderTop": "#ddddff",
+    // "tab.unfocusedActiveBorderTop": "#ddddff",
+    // "breadcrumb.background": "#17172100",
+    // "editorGutter.background": "#17172100",
+    // "sideBarTitle.foreground": "#17172100",
+    // "terminal.background": "#121217"
+  },
+  "explorer.compactFolders": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+  },
+  "[go]": {
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "[json][jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "search.exclude": {
+    "package-lock.json": true
+  },
+  "github.copilot.preferredAccount": "TheCodeTherapy",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  },
+  "[c]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "cmake.options.statusBarVisibility": "visible",
+  "cmake.showOptionsMovedNotification": false,
+  "cmake.pinnedCommands": [
+    "workbench.action.tasks.configureTaskRunner",
+    "workbench.action.tasks.runTask"
+  ],
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "clangd.path": "/home/marcogomez/.config/Code/User/globalStorage/llvm-vs-code-extensions.vscode-clangd/install/18.1.3/clangd_18.1.3/bin/clangd",
+  "workbench.activityBar.location": "top",
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  }
+}

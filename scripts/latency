@@ -1,0 +1,6 @@
+#!/bin/bash
+EIP=$(dig TXT +short o-o.myaddr.l.google.com @ns1.google.com | sed "s/\"//g")
+IIP=$(ip -4 address | grep inet | grep eno1 | sed -n 's/^ *inet *\([.0-9]*\).*/\1/p')
+LAT=$(ping -i 0.2 -c 3 google.com | tail -n 1 | cut -d '=' -f 2 | cut -d '/' -f 2)
+OUT="External IP: $EIP\nInternal IP: $IIP\nLatency: ${LAT}ms"
+echo -e $OUT | rofi -dmenu -theme ~/ZDotfiles/dotfiles/rofi/sp.theme

@@ -1,212 +1,102 @@
 #!/bin/bash
-set -eu -o pipefail
 
-ME="/home/$(whoami)"
-CFG="$ME/.config"
-DOTDIR="${ME}/wsl-dotfiles"
-NVMDIR="${ME}/.nvm"
-BINDIR="${DOTDIR}/bin"
+source "$(dirname "$0")/z_setup_scripts/_helpers.sh"
+source "$(dirname "$0")/z_setup_scripts/_config.sh"
 
-declare -rA COLORS=(
-    [RED]=$'\033[0;31m'
-    [GREEN]=$'\033[0;32m'
-    [BLUE]=$'\033[0;34m'
-    [PURPLE]=$'\033[0;35m'
-    [CYAN]=$'\033[0;36m'
-    [WHITE]=$'\033[0;37m'
-    [YELLOW]=$'\033[0;33m'
-    [BOLD]=$'\033[1m'
-    [OFF]=$'\033[0m'
-)
-
-print_red () {
-    echo -e "\n${COLORS[RED]}${1}${COLORS[OFF]}\n"
+update_system() {
+  print_info "Updating system ..."
+  sudo apt-get update -qq || handle_error "Failed to update package lists."
+  sudo apt-get full-upgrade -y -qq || handle_error "System update failed."
+  sudo apt-get autoremove -y -qq || handle_error "Autoremove failed."
+  sudo apt-get autoclean -y -qq || handle_error "Autoclean failed."
+  sudo apt-get install -y -qq aptitude || handle_error "Failed to install aptitude."
 }
 
-print_yellow () {
-    echo -e "\n${COLORS[YELLOW]}${1}${COLORS[OFF]}\n"
+install_basic_packages() {
+  local packages=(
+    plocate build-essential llvm pkg-config autoconf automake cmake cmake-data
+    autopoint ninja-build gettext libtool libtool-bin g++ make meson clang gcc
+    nasm clang-tools dkms curl wget ca-certificates gnupg lsb-release gawk
+    xclip notification-daemon git git-lfs zsh tmux inxi most tree tar jq pixz
+    lzma unzip neofetch fonts-font-awesome timidity ttfautohint
+    v4l2loopback-dkms ffmpeg htop bc fzf ranger ripgrep gdebi rar imagemagick
+    net-tools xcb-proto dialog policykit-1 uthash-dev hashdeep file usbview
+    v4l-utils python-is-python3 ipython3 python3-pip python3-dev python3-venv
+    python3-gi python3-gi-cairo python3-cairo python3-setuptools python3-babel
+    python3-dbus python3-pynvim python3-sphinx python3-packaging
+    python3-xcbgen pipx xutils-dev valac hwdata bear p7zip-full
+    zsh-autosuggestions zsh-syntax-highlighting
+  )
+
+  print_info "Installing basic packages ..."
+  if ! sudo debconf-apt-progress -- apt-get install -y "${packages[@]}"; then
+    handle_error "Failed to install one or more packages."
+  fi
 }
 
-print_green () {
-    echo -e "\n${COLORS[GREEN]}${1}${COLORS[OFF]}\n"
+update_plocate_db() {
+  print_info "Updating plocate database ..."
+  sudo updatedb || handle_error "Failed to update the file database."
 }
 
-print_cyan () {
-    echo -e "\n${COLORS[CYAN]}${1}${COLORS[OFF]}\n"
-}
+install_recipes() {
+  local recipe_dir
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  recipe_dir="${SCRIPT_DIR}/z_setup_scripts"
 
-wait_key () {
-    echo -e "\n${COLORS[YELLOW]}"
-    read -n 1 -s -r -p "${1}"
-    echo -e "${COLORS[OFF]}\n"
-}
+  local recipes=(
+    "$recipe_dir/install_rust.sh"
+    "$recipe_dir/install_exa.sh"
+    "$recipe_dir/install_fd.sh"
+    "$recipe_dir/install_gcloud.sh"
+    "$recipe_dir/install_githubcli.sh"
+    "$recipe_dir/install_lazygit.sh"
+    "$recipe_dir/install_tmuxpm.sh"
+    "$recipe_dir/install_nvm.sh"
+    "$recipe_dir/install_node.sh"
+    "$recipe_dir/install_yarn.sh"
+    "$recipe_dir/install_neovim.sh"
+    "$recipe_dir/install_ytdlp.sh"
+    "$recipe_dir/install_nginx.sh"
+    "$recipe_dir/install_oh-my-zsh.sh"
+    "$recipe_dir/install_powerlevel10k.sh"
+  )
 
-home_link () {
-    sudo rm -rf $ME/$2 > /dev/null 2>&1 \
-        && ln -s $DOTDIR/$1 $ME/$2 \
-        || ln -s $DOTDIR/$1 $ME/$2
-    msg="# Linked $DOTDIR/$1 to -> $ME/$2"
-    print_cyan "${msg}"
-}
-
-home_link_cfg () {
-    mkdir -p $CFG
-    sudo rm -rf $CFG/$1 > /dev/null 2>&1 \
-        && ln -s $DOTDIR/$1 $CFG/. \
-        || ln -s $DOTDIR/$1 $CFG/.
-    msg="# Linked $DOTDIR/$1 to dir -> $CFG/$1"
-    print_cyan "${msg}"
-}
-
-update_system () {
-    msg="# Updating your system (please wait)..."
-    print_green "${msg}"
-    # echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
-    sudo apt -y update && sudo apt -y upgrade
-}
-
-install_basic_packages () {
-    msg="# Installing basic packages (please wait)..."
-    print_green "${msg}"
-    sudo apt -y install unzip lzma tree neofetch build-essential autoconf \
-        automake cmake cmake-data pkg-config clang git neovim zsh python3 \
-        ipython3 python3-pip python3-dev python-is-python3 tmux ffmpeg \
-		    wget dialog ninja-build gettext curl
-    rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
-}
-
-install_nvm () {
-    msg="INSTALLING NVM ..."
-    print_yellow "${msg}"
-    if [[ -f $NVMDIR/nvm.sh ]]; then
-        print_green "nvm already installed."
+  for recipe in "${recipes[@]}"; do
+    if [ -f "$recipe" ]; then
+      print_info "Running recipe: $(basename "$recipe")"
+      # shellcheck source=/dev/null
+      source "$recipe" || handle_error "Failed to execute recipe: $(basename "$recipe")"
     else
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+      print_warning "Recipe not found: $(basename "$recipe")"
     fi
+  done
 }
 
-install_node () {
-    msg="INSTALLING NODEJS ..."
-    print_yellow "${msg}"
-    if [[ -f $NVMDIR/nvm.sh ]]; then
-        if $(npm --version > /dev/null 2>&1); then
-            msg="npm already installed."
-            print_green "${msg}"
-        else
-            source $NVMDIR/nvm.sh
-            VER=$(nvm ls-remote --lts | grep "Latest" | tail -n 1 | sed 's/[-/a-zA-Z]//g' | sed 's/^[ \t]*//')
-            msg="Installing Latest NodeJS version found: ${VER}"
-            print_yellow "${msg}"
-            nvm install $VER
-        fi
-    else
-        msg="nvm not installed."
-        print_red "${msg}"
-    fi
-}
+link_dotfiles() {
+  local target_home="$HOME"
+  local target_config="$HOME/.config"
+  mkdir -p "$target_config/Code/User"
+  declare -A files_to_link=(
+    ["${DOTDOT}/bash/bashrc"]="$target_home/.bashrc"
+    ["${DOTDOT}/bash/inputrc"]="$target_home/.inputrc"
+    ["${DOTDOT}/profile/profile"]="$target_home/.profile"
+    ["${DOTDOT}/neofetch"]="$target_config/neofetch"
+    ["${DOTDOT}/nvim"]="$target_config/nvim"
+    ["${DOTDOT}/vscode/settings.json"]="$target_config/Code/User/settings.json"
+    ["${DOTDOT}/zsh/zshrc"]="$target_home/.zshrc"
+    ["${DOTDOT}/zsh/zshenv"]="$target_home/.zshenv"
+    ["${DOTDOT}/tmux/tmux.conf"]="$target_home/.tmux.conf"
+  )
 
-install_pnpm () {
-    msg="INSTALLING PNPM ..."
-    print_yellow "${msg}"
-    curl -fsSL https://get.pnpm.io/install.sh | sh -
+  for source_file in "${!files_to_link[@]}"; do
+    local target_file="${files_to_link[$source_file]}"
+    link_file "$source_file" "$target_file"
+  done
 }
-
-install_yarn () {
-    if $(yarn --version > /dev/null 2>&1); then
-        msg="Yarn already installed."
-        print_green "${msg}"
-    else
-        msg="Installing Yarn..."
-        print_yellow "${msg}"
-        corepack enable
-        corepack prepare yarn@stable --activate
-    fi
-}
-
-install_awscli () {
-    if $(aws --version > /dev/null 2>&1); then
-        msg="AWS CLI already installed."
-        print_green "${msg}"
-    else
-        msg="Installing AWS CLI..."
-        print_cyan "${msg}"
-        pip3 install awscli --upgrade --user
-    fi
-}
-
-install_nvim () {
-    msg="# Installing latest neovim (please wait)..."
-    print_green "${msg}"
-    sudo add-apt-repository -y ppa:neovim-ppa/stable
-    sudo apt -y update
-    sudo apt -y install neovim
-    sudo apt -y autoremove
-}
-
-install_latest_nvim() {
-    msg="# Installing latest neovim (please wait)..."
-    print_green "${msg}"
-    c="$(lscpu -p | grep -v '#' | wc -l)"
-    cd $ME
-    git clone https://github.com/neovim/neovim.git
-    cd neovim
-    git checkout v0.9.4
-    make -j$c CMAKE_BUILD_TYPE=Release
-}
-
-install_exa () {
-    if [[ -f $BINDIR/exa ]]; then
-        msg="Exa already installed."
-        print_green "${msg}"
-    else
-        msg="# Downloading Exa (please wait)..."
-        print_green "${msg}"
-        cd $BINDIR \
-            && mkdir exa-10.0.1 && cd exa-10.0.1 \
-            && wget https://github.com/ogham/exa/releases/download/v0.10.1/exa-linux-x86_64-v0.10.1.zip \
-            && unzip exa-linux-x86_64-v0.10.1.zip \
-            && rm exa-linux-x86_64-v0.10.1.zip \
-            && cd $BINDIR \
-            && ln -s ./exa-10.0.1/bin/exa . \
-            && cd ..
-    fi
-}
-
-cd $ME
 
 update_system
 install_basic_packages
-install_awscli
-#install_nvim
-# install_latest_nvim
-install_exa
-
-home_link "bash/bashrc.sh" ".bashrc"
-home_link "bash/inputrc.sh" ".inputrc"
-home_link "tmux/tmux.conf" ".tmux.conf"
-home_link "tmux/tmux.conf.local" ".tmux.conf.local"
-home_link "tmux/tmux.help" ".tmux.help"
-
-# if [[ -f $ME/.nvm/nvm.sh ]]; then
-#     source $ME/.bashrc
-# else
-#     install_nvm
-# fi
-
-# if $(node --version > /dev/null 2>&1); then
-#     msg="NodeJS already installed."
-#     print_green "${msg}"
-# else
-#     install_node
-# fi
-
-# if $(pnpm --version > /dev/null 2>&1); then
-#     msg="PNPM already installed."
-#     print_green "${msg}"
-# else
-#     install_pnpm
-# fi
-
-install_yarn
-
-sudo usermod -s /usr/bin/zsh $(whoami)
+install_recipes
+link_dotfiles
+update_plocate_db

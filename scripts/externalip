@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#=============================================================================
+# @TheCodeTherapy - https://mgz.me
+# External IP
+# To use, create a custom keyboard shortcut by following below instructions:
+# Settings -> Keyboard -> Keyboard Shortcuts -> View and Customise Shortcuts ->
+# -> Custom Shortcuts -> + ->
+# Name: External IP Picker
+# Command: [full path to this script file]
+# Shortcut: Super + - (or any other you might want)
+#=============================================================================
+EXTIP=$(dig TXT +short o-o.myaddr.l.google.com @ns1.google.com | sed "s/\"//g")
+THEME="/home/${USER}/ZDotfiles/dotfiles/rofi/sp.theme.rasi"
+chosen=$(echo $EXTIP | rofi -dmenu -theme ${THEME} | sed "s/ .*//")
+[ -z "$chosen" ] && exit
+
+if [ -n "$1" ]; then
+	xdotool type "$chosen"
+else
+	echo "$chosen" | tr -d '\n' | xclip -selection clipboard
+	notify-send -a "External IP Picker" "'$chosen' copied to clipboard." --expire-time=2100 &
+fi

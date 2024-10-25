@@ -1,0 +1,13 @@
+#!/bin/bash
+mkdir -p compressed
+for f in *.mp4; do
+    ORIG=$(ls -hl --color=auto "$f")
+    ffmpeg -i "$f" \
+        -vcodec libx264 -crf 20 -r 24 \
+        -acodec mp3 -b:a 128k -ar 44100 \
+        -loglevel error \
+        "compressed/${f##*/}"
+    DEST=$(ls -hl --color=auto "./compressed/$f")
+    echo -e $ORIG
+    echo -e $DEST
+done

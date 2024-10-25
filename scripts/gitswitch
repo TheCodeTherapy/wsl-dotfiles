@@ -1,0 +1,37 @@
+#!/bin/bash
+# Define the menu options
+options=(
+    1 "Personal Credentials"
+    2 "Improbable Credentials"
+)
+
+# Show the menu and get the user's choice
+choice=$(dialog --clear \
+                --backtitle "Switch Git Credentials" \
+                --title "Git Credentials Selection" \
+                --menu "Choose an option:" \
+                15 40 4 \
+                "${options[@]}" \
+                2>&1 >/dev/tty)
+
+# Run the appropriate commands based on the user's choice
+case $choice in
+    1)
+    clear
+    echo "Switching to Personal Git Credentials..."
+    cp ~/.ssh/personal_id_rsa ~/.ssh/id_rsa
+    cp ~/.ssh/personal_id_rsa.pub ~/.ssh/id_rsa.pub
+    echo "Done!"
+    ;;
+    2)
+    clear
+    echo "Switching to Improbable Git Credentials..."
+    cp ~/.ssh/improbable_id_rsa ~/.ssh/id_rsa
+    cp ~/.ssh/improbable_id_rsa.pub ~/.ssh/id_rsa.pub
+    echo "Done!"
+    ;;
+    *)
+    clear
+    ;;
+esac
+
