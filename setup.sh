@@ -58,6 +58,7 @@ install_recipes() {
     "$recipe_dir/install_neovim.sh"
     "$recipe_dir/install_ytdlp.sh"
     "$recipe_dir/install_nginx.sh"
+    "$recipe_dir/install_cloudflared.sh"
     "$recipe_dir/install_oh-my-zsh.sh"
     "$recipe_dir/install_powerlevel10k.sh"
   )
