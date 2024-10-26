@@ -111,6 +111,7 @@ export PATH=$PATH:$HOME/${DOTFILESPATH}/bin
 export PATH=$PATH:$HOME/${DOTFILESPATH}/depot_tools
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.local/bin
+export GOPATH="$ME/.go"
 export PAGER="most"
 export DOTFILES=$DOTFILESPATH
 
