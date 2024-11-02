@@ -105,7 +105,7 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 export ME="/home/$(whoami)"
-export DOTFILESPATH="wsl_dotfiles"
+export DOTFILESPATH="wsl-dotfiles"
 export PATH=$PATH:$HOME/${DOTFILESPATH}/scripts
 export PATH=$PATH:$HOME/${DOTFILESPATH}/bin
 export PATH=$PATH:$HOME/${DOTFILESPATH}/depot_tools
