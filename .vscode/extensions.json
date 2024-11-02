@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    "TheCodeTherapy.thecodetheme-dark",
+    "TheCodeTherapy.thecodegpt",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "boyswan.glsl-literal",
+    "ms-python.python",
+    "catppuccin.catppuccin-vsc",
+    "catppuccin.catppuccin-vsc-icons",
+    "github.copilot",
+    "github.copilot-chat",
+    "github.vscode-github-actions",
+    "golang.go",
+    "ms-azuretools.vscode-docker",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode.cmake-tools",
+    "ms-vscode.makefile-tools",
+    "rust-lang.rust-analyzer",
+    "slevesque.shader",
+    "twxs.cmake",
+    "xaver.clang-format",
+    "ziglang.vscode-zig"
+  ]
+}
