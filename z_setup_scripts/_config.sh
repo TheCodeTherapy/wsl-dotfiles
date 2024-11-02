@@ -3,7 +3,7 @@
 # Define configuration variables
 ME="/home/$(whoami)"
 export ME
-export DOTDIR="${ME}/wsl_dotfiles"
+export DOTDIR="${ME}/wsl-dotfiles"
 export DOTDOT="${DOTDIR}/dotfiles"
 
 export BINDIR="${DOTDIR}/bin"
