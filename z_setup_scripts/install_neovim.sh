@@ -16,15 +16,15 @@ install_neovim() {
     rm -rf neovim ||
       handle_error "Failed to remove Neovim directory"
 
-    git clone --quiet https://github.com/neovim/neovim ||
+    git clone https://github.com/neovim/neovim ||
       handle_error "Failed to clone repository"
 
     cd neovim || handle_error "Failed to enter Neovim directory"
 
-    git fetch --tags --quiet ||
+    git fetch --tags ||
       handle_error "Failed to fetch tags"
 
-    git checkout v0.10.1 -q ||
+    git checkout v0.10.1 ||
       handle_error "Failed to checkout version v0.10.1"
 
     make CMAKE_BUILD_TYPE=RelWithDebInfo -j"$(nproc)" ||
