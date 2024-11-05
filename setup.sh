@@ -14,7 +14,7 @@ update_system() {
 
 install_basic_packages() {
   local packages=(
-    plocate build-essential llvm pkg-config autoconf automake cmake cmake-data
+    build-essential llvm pkg-config autoconf automake cmake cmake-data
     autopoint ninja-build gettext libtool libtool-bin g++ make meson clang gcc
     nasm clang-tools dkms curl wget ca-certificates gnupg lsb-release gawk
     xclip notification-daemon git git-lfs zsh tmux inxi most tree tar jq pixz
@@ -32,11 +32,6 @@ install_basic_packages() {
   if ! sudo debconf-apt-progress -- apt-get install -y "${packages[@]}"; then
     handle_error "Failed to install one or more packages."
   fi
-}
-
-update_plocate_db() {
-  print_info "Updating plocate database ..."
-  sudo updatedb || handle_error "Failed to update the file database."
 }
 
 install_recipes() {
@@ -101,4 +96,3 @@ update_system
 install_basic_packages
 install_recipes
 link_dotfiles
-update_plocate_db
