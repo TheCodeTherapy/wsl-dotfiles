@@ -106,11 +106,11 @@ source $ZSH/oh-my-zsh.sh
 # export ARCHFLAGS="-arch $(uname -m)"
 export ME="/home/$(whoami)"
 export DOTFILESPATH="wsl-dotfiles"
-export PATH=$PATH:$HOME/${DOTFILESPATH}/scripts
-export PATH=$PATH:$HOME/${DOTFILESPATH}/bin
-export PATH=$PATH:$HOME/${DOTFILESPATH}/depot_tools
-export PATH=$PATH:$HOME/.cargo/bin
-export PATH=$PATH:$HOME/.local/bin
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/${DOTFILESPATH}/depot_tools:$PATH"
+export PATH="$HOME/${DOTFILESPATH}/scripts:$PATH"
+export PATH="$HOME/${DOTFILESPATH}/bin:$PATH"
 export GOPATH="$ME/.go"
 export PAGER="most"
 export DOTFILES=$DOTFILESPATH

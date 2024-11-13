@@ -16,37 +16,37 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-PATH=$PATH:$HOME/${DOTFILESPATH}/scripts
-PATH=$PATH:$HOME/${DOTFILESPATH}/bin
-PATH=$PATH:$HOME/${DOTFILESPATH}/z_setup_scripts
+if [ -d "$HOME/.cargo/bin" ] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
 
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+if [ -d /opt/rust/bin ] ; then
+    PATH="/opt/rust/bin:$PATH"
+fi
+
+if [ -d "$HOME/go/bin" ] ; then
+    PATH="$HOME/go/bin:$PATH"
+fi
+
+if [ -d /usr/local/go/bin ] ; then
+    PATH="/usr/local/go/bin:$PATH"
+fi
+
+if [ -d "$HOME/$DOTFILESPATH/depot_tools" ] ; then
+    PATH="$HOME/$DOTFILESPATH/depot_tools:$PATH"
 fi
 
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ -d "$HOME/.cargo/bin" ] ; then
-    PATH=$PATH:$HOME/.cargo/bin
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
 fi
 
-if [ -d /opt/rust/bin ] ; then
-    PATH=$PATH:/opt/rust/bin
-fi
-
-if [ -d "$HOME/go/bin" ] ; then
-    PATH=$PATH:$HOME/go/bin
-fi
-
-if [ -d /usr/local/go/bin ] ; then
-    PATH=$PATH:/usr/local/go/bin
-fi
-
-if [ -d "$HOME/$DOTFILESPATH/depot_tools" ] ; then
-    PATH=$PATH:$HOME/$DOTFILESPATH/depot_tools
-fi
+PATH="$HOME/${DOTFILESPATH}/scripts:$PATH"
+PATH="$HOME/${DOTFILESPATH}/bin:$PATH"
+PATH="$HOME/${DOTFILESPATH}/z_setup_scripts:$PATH"
 
 export PATH
 export DOTFILES=$DOTFILESPATH
