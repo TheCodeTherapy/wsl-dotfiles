@@ -24,8 +24,8 @@ if [ -d /opt/rust/bin ] ; then
     PATH="/opt/rust/bin:$PATH"
 fi
 
-if [ -d "$HOME/go/bin" ] ; then
-    PATH="$HOME/go/bin:$PATH"
+if [ -d "$HOME/.go/bin" ] ; then
+    PATH="$HOME/.go/bin:$PATH"
 fi
 
 if [ -d /usr/local/go/bin ] ; then
