@@ -25,7 +25,7 @@ install_basic_packages() {
     python3-gi python3-gi-cairo python3-cairo python3-setuptools python3-babel
     python3-dbus python3-pynvim python3-sphinx python3-packaging
     python3-xcbgen pipx xutils-dev valac hwdata bear p7zip-full
-    zsh-autosuggestions zsh-syntax-highlighting
+    zsh-autosuggestions zsh-syntax-highlighting openjdk-17-jdk
   )
 
   print_info "Installing basic packages ..."
