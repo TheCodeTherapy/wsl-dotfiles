@@ -24,6 +24,8 @@ install_gcloud() {
     sudo apt-get update -qq || handle_error "Failed to update package list"
 
     sudo apt-get install -y -qq google-cloud-cli || handle_error "Failed to install GCloud"
+    sudo apt-get install -y -qq google-cloud-cli-pubsub-emulator ||
+      handle_error "Failed to install GCloud PubSub emulator"
 
     print_success "GCloud installed successfully."
   fi
