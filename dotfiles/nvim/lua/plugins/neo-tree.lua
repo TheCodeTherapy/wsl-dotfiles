@@ -4,10 +4,16 @@ return {
     filesystem = {
       filtered_items = {
         hide_dotfiles = false,
-        hide_gitignored = false,
+        hide_gitignored = true,
+        hide_by_name = {
+          "node_modules",
+          ".git",
+          ".cache",
+        },
       },
       window = {
-        width = 30,
+        title = "_",
+        width = 32,
         mappings = {
           ["L"] = "open_nofocus",
         },
@@ -22,6 +28,10 @@ return {
       },
     },
     sources = { "filesystem", "buffers", "git_status", "document_symbols" },
+    source_selector = {
+      winbar = true,
+      statusline = true,
+    },
     auto_close = true,
     close_if_last_window = true,
   },

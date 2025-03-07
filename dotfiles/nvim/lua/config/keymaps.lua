@@ -1,70 +1,17 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
-
-require("thecodetherapy.goto")
-
 local keymap = vim.keymap
 local opts = { noremap = true, silent = true }
+---@diagnostic disable-next-line: unused-local
 local surround_chars = "[\"'(){}%[%]]"
 
-local function jump_right_on_surroundings()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local winnr = vim.api.nvim_get_current_win()
-  local cursor_pos = vim.api.nvim_win_get_cursor(winnr)
-  local line_num, col = cursor_pos[1], cursor_pos[2] + 1
-  local total_lines = vim.api.nvim_buf_line_count(bufnr)
-
-  for l = line_num, total_lines do
-    local line_text = vim.api.nvim_buf_get_lines(bufnr, l - 1, l, false)[1]
-    local start_index = l == line_num and col or 1
-    local found_at_line_end = false
-    for i = start_index, #line_text do
-      if string.match(line_text:sub(i, i), surround_chars) then
-        if i == #line_text then
-          found_at_line_end = true
-          break
-        else
-          vim.api.nvim_win_set_cursor(winnr, { l, i })
-          return
-        end
-      end
-    end
-
-    if found_at_line_end then
-      if l < total_lines then
-        line_num = l + 1
-        col = 1
-      else
-        return
-      end
-    else
-      if l < total_lines then
-        line_num = l + 1
-        col = 1
-      end
-    end
+local function merge_tables(t1, t2)
+  local result = {}
+  for k, v in pairs(t1) do
+    result[k] = v
   end
-end
-
-local function jump_left_on_surroundings()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local winnr = vim.api.nvim_get_current_win()
-  local cursor_pos = vim.api.nvim_win_get_cursor(winnr)
-  local line_num, col = cursor_pos[1], cursor_pos[2]
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, line_num, false)
-
-  for ln = #lines, 1, -1 do
-    local line_text = lines[ln]
-    local end_col = ln == line_num and col or #line_text
-    for i = end_col, 1, -1 do
-      local char = line_text:sub(i, i)
-      if string.match(char, surround_chars) then
-        vim.api.nvim_win_set_cursor(winnr, { ln, i - 2 })
-        return
-      end
-    end
+  for k, v in pairs(t2) do
+    result[k] = v
   end
+  return result
 end
 
 local function copy_diagnostics_to_clipboard()
@@ -127,14 +74,62 @@ keymap.set("n", "<leader>ccm", create_and_preview_diagnostics, opts)
 keymap.set("n", "<leader>cca", copy_file_and_diagnostics_to_clipboard, opts)
 keymap.set("n", "<leader>cc", copy_diagnostics_to_clipboard, opts)
 
-keymap.set("n", "+", "<C-a>")
-keymap.set("n", "-", "<C-x>")
+local function change_project_root()
+  vim.ui.input({ prompt = "Enter new project root: ", completion = "dir" }, function(new_root)
+    if new_root and new_root ~= "" then
+      new_root = vim.fn.fnamemodify(new_root, ":p") -- Get absolute path
+      if vim.fn.isdirectory(new_root) == 1 then
+        -- Try closing all buffers (without force), gracefully handle cancellation
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+          if vim.api.nvim_buf_is_loaded(buf) then
+            ---@diagnostic disable-next-line: unused-local
+            local ok, _err = pcall(vim.api.nvim_buf_delete, buf, { force = false })
+            if not ok then
+              print("Buffer closing canceled. Stopping project switch.")
+              return -- **Gracefully exit if user cancels**
+            end
+          end
+        end
 
--- Delete a word backwards
-keymap.set("n", "dw", "vb_d")
+        -- Close Neo-tree if it is open
+        if pcall(require, "neo-tree.command") then
+          require("neo-tree.command").execute({ action = "close" })
+        end
 
--- Select all
-keymap.set("n", "<C-a>", "gg<S-v>G")
+        -- Change Neovim working directory
+        vim.cmd("cd " .. new_root)
+
+        -- Re-open Neo-tree with the new root
+        if pcall(require, "neo-tree.command") then
+          require("neo-tree.command").execute({ action = "focus", dir = new_root })
+        end
+
+        -- Unfocus Neo-tree and return to the main window
+        vim.cmd("wincmd p")
+
+        vim.cmd("Alpha")
+
+        -- Notify user
+        print("Project root changed to: " .. new_root)
+      else
+        print("Invalid directory: " .. new_root)
+      end
+    end
+  end)
+end
+
+vim.keymap.set(
+  "n",
+  "<leader>jp",
+  change_project_root,
+  { noremap = true, silent = true, desc = "Jump to new project root" }
+)
+
+keymap.set("n", "<leader>#", "#N", opts)
+keymap.set("t", "<S-Space>", "<Space>", opts)
+
+keymap.set("i", "<S-Del>", "<Space><Esc>vwhdi", opts)
+keymap.set("n", "<S-Del>", "a<Space><Esc>vwhdi", opts)
 
 -- Move lines around
 keymap.set("v", "<A-Up>", ":m '<-2<CR>gv=gv", opts)
@@ -142,16 +137,10 @@ keymap.set("v", "<A-Down>", ":m '>+1<CR>gv=gv", opts)
 
 -- New tab
 keymap.set("n", "te", "tabedit", opts)
--- keymap.set("n", "<tab>", ":tabnext<Return>", opts)
--- keymap.set("n", "<s-tab>", ":tabprev", opts)
 
 -- Split window
 keymap.set("n", "ss", ":split<Return>", opts)
 keymap.set("n", "sv", ":vsplit<Return>", opts)
-
--- Morse surroundings
-keymap.set({ "n", "i", "v" }, ",,,", jump_left_on_surroundings, opts)
-keymap.set({ "n", "i", "v" }, ",,", jump_right_on_surroundings, opts)
 
 -- Move around
 keymap.set("n", "<leader><Left>", "<C-w>h")
@@ -170,18 +159,52 @@ keymap.set("n", "<C-w><Right>", "<C-w>>")
 -- Disable default macro record
 keymap.set("n", "q", "<Nop>", opts)
 
--- Normie emulation ==========================================================
-keymap.set("n", "<S-End>", "v$")
-keymap.set("v", "<S-End>", "g_", opts)
-keymap.set("i", "<S-End>", "<Esc>v$", opts)
+-- VSCode like keybindings ---------------------------------------------------
+-- Save with Ctrl + s getting back to insert mode
+keymap.set("i", "<C-s>", "<Esc>:w<CR>a", opts)
+keymap.set("n", "<C-b>", ":Neotree toggle<CR>", opts)
+keymap.set("i", "<C-b>", "<Esc>:Neotree toggle<CR>", opts)
 
+-- select stuff with shift + keys
+keymap.set("n", "<S-End>", "v$h")
+keymap.set("v", "<S-End>", "g_", opts)
+keymap.set("i", "<S-End>", "<Esc>v$h", opts)
 keymap.set("n", "<S-Home>", "v0")
 keymap.set("v", "<S-Home>", "0", opts)
 keymap.set("i", "<S-Home>", "<Esc>v0", opts)
+keymap.set("i", "<S-Right>", "<Esc>vl", opts)
+keymap.set("v", "<S-Right>", "l", opts)
+keymap.set("i", "<S-Left>", "<Esc>vh", opts)
+keymap.set("v", "<S-Left>", "h", opts)
+keymap.set("n", "<S-Down>", "v<Down>", opts)
+keymap.set("v", "<S-Down>", "j", opts)
+keymap.set("n", "<S-Up>", "v<Up>", opts)
+keymap.set("v", "<S-Up>", "k", opts)
 
+-- select all with Ctrl + a
+keymap.set("n", "<C-a>", "gg<S-v>G")
+
+-- Cut, copy and paste
+keymap.set("v", "<C-x>", '"+d', opts)
 keymap.set("v", "<C-c>", '"+y', opts)
 keymap.set("n", "<C-v>", '"+p', opts)
-keymap.set("i", "<C-v>", "<C-r>+", { noremap = true })
+keymap.set("i", "<C-v>", "<C-r>+", opts)
+keymap.set("v", "<C-v>", '"_d"+P', opts)
+
+-- Visual block with Alt + v
+keymap.set("n", "<A-v>", "<Cmd>execute 'normal! <C-v>'<CR>", opts)
+
+-- Close current buffer (equivalent to closing a tab in VSCode)
+keymap.set("n", "<C-w>", ":BufferLinePickClose<CR>", opts)
+
+-- `Ctrl+P` to find files (same as VSCode's Quick Open)
+keymap.set("n", "<C-p>", ":Telescope find_files<CR>", opts)
+
+-- `Ctrl+Shift+P` for Neovim's command palette (like VSCode)
+keymap.set("n", "<C-S-p>", ":Telescope commands<CR>", opts)
+
+-- `Ctrl+Shift+F` for searching in project (VSCode's global search)
+keymap.set("n", "<C-S-f>", ":Telescope live_grep<CR>", opts)
 
 -- moving lines up and down with Alt + keys in normal mode or insert mode
 keymap.set("n", "<A-Up>", ":m .-2<CR>==", opts)
@@ -189,21 +212,20 @@ keymap.set("i", "<A-Up>", "<Esc>:m .-2<CR>==gi", opts)
 keymap.set("n", "<A-Down>", ":m .+1<CR>==", opts)
 keymap.set("i", "<A-Down>", "<Esc>:m .+1<CR>==gi", opts)
 
--- making shift + down and shift + up select lines
-keymap.set("n", "<S-Down>", "v<Down>", opts)
-keymap.set("v", "<S-Down>", "j", opts)
-keymap.set("n", "<S-Up>", "v<Up>", opts)
-keymap.set("v", "<S-Up>", "k", opts)
-
 -- tab or shift+tab on normal mode to indent right or left the current line
 keymap.set("n", "<Tab>", ">>")
 keymap.set("n", "<S-Tab>", "<<")
--- on insert mode, tab or shift+tab will indent right or left the current line
-keymap.set("i", "<Tab>", "<C-t>")
-keymap.set("i", "<S-Tab>", "<C-d>")
+
 -- on visual mode, tab or shift+tab will indent right or left the selected lines
 keymap.set("v", "<Tab>", ">gv")
 keymap.set("v", "<S-Tab>", "<gv")
+
+keymap.set("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+
+keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+keymap.set("n", "<F12>", ":Telescope diagnostics<CR>", opts)
+keymap.set("n", "<A-CR>", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+-- ---------------------------------------------------------------------------
 
 -- on visual mode, Ctrl + f should search the word under the cursor in the current buffer
 vim.keymap.set("n", "<C-f>", function()
@@ -212,6 +234,7 @@ vim.keymap.set("n", "<C-f>", function()
     use_regex = false,
   })
 end, opts)
+
 -- on insert mode, Ctrl + f should search the word under the cursor in the current buffer
 vim.keymap.set("i", "<C-f>", function()
   local word = vim.fn.expand("<cword>")
@@ -237,13 +260,9 @@ vim.keymap.set("i", "<C-g>", function()
     default_text = word,
   })
 end, opts)
--- ===========================================================================
 
-vim.api.nvim_set_keymap("n", "gg", "<cmd>lua require('thecodetherapy.goto').go_to_implementation()<CR>", opts)
-
--- this bindkey is not set in plugins/session-manager.lua
-vim.api.nvim_set_keymap("n", "<leader>rr", "<cmd>lua os.exit(1)<CR>", opts)
-
--- sets up <leader>n to trigger <leader>snt in normal mode
-keymap.set("n", "<leader>n", ":NoicePick<CR>", opts)
-keymap.set("n", "<leader>p", ":Telescope neovim-project discover<CR>", opts)
+-- Back to start
+vim.keymap.set("n", "<leader>qA", function()
+  vim.cmd("bufdo bwipeout")
+  vim.cmd("Alpha")
+end, merge_tables(opts, { desc = "Close all buffers and return to dashboard" }))

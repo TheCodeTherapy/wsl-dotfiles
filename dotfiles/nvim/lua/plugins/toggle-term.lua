@@ -6,7 +6,7 @@ return {
   cmd = { "ToggleTerm" },
   keys = {
     {
-      "<C-x>",
+      "<C-z>",
       function()
         local count = vim.v.count1
         require("toggleterm").toggle(count, 0, Util.root.get(), "float")
@@ -54,13 +54,6 @@ return {
       end,
       desc = "ToggleTerm (tab root_dir)",
     },
-    {
-      "<leader>TT",
-      function()
-        require("toggleterm").toggle(1, 100, vim.loop.cwd(), "tab")
-      end,
-      desc = "ToggleTerm (tab cwd_dir)",
-    },
   },
   opts = {
     size = function(term)
@@ -70,7 +63,7 @@ return {
         return vim.o.columns * 0.4
       end
     end,
-    open_mapping = [[<C-x>]],
+    open_mapping = [[<C-z>]],
     -- on_open = fun(t: Terminal), -- function to run when the terminal opens
     -- on_close = fun(t: Terminal), -- function to run when the terminal closes
     -- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout

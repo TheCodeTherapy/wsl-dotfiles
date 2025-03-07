@@ -4,26 +4,15 @@ return {
     presets = {
       lsp_doc_border = true,
     },
-    lsp = {
+    views = {
       hover = {
-        enabled = true,
-        silent = false,
-      },
-      signature = {
-        opts = {
-          size = {
-            height = 4,
+        win_options = {
+          winhighlight = {
+            Normal = "NoicePopup",
+            FloatBorder = "NoicePopup",
+            CursorLine = "NoicePopup",
+            PmenuMatch = "NoicePopup",
           },
-        },
-      },
-      documentation = {
-        view = "hover",
-        opts = {
-          lang = "markdown",
-          replace = true,
-          render = "plain",
-          format = { "{message}" },
-          win_options = { concealcursor = "n", conceallevel = 3 },
         },
       },
     },

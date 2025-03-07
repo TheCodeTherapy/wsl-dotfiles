@@ -1,12 +1,10 @@
 {
   "extras": [
-    "lazyvim.plugins.extras.ai.copilot",
-    "lazyvim.plugins.extras.editor.navic",
-    "lazyvim.plugins.extras.editor.outline",
-    "lazyvim.plugins.extras.ui.alpha"
+    "lazyvim.plugins.extras.editor.telescope"
   ],
+  "install_version": 7,
   "news": {
     "NEWS.md": "10960"
   },
-  "version": 7
+  "version": 8
 }

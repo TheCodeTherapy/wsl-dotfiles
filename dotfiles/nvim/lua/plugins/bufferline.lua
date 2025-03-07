@@ -4,7 +4,6 @@ return {
   keys = {
     { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle Pin" },
     { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete Non-Pinned Buffers" },
-    { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete Other Buffers" },
     { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete Buffers to the Right" },
     { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete Buffers to the Left" },
     { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev Buffer" },
@@ -17,9 +16,9 @@ return {
   opts = {
     options = {
       -- stylua: ignore
-      close_command = function(n) LazyVim.ui.bufremove(n) end,
+      close_command = function(n) Snacks.bufdelete(n) end,
       -- stylua: ignore
-      right_mouse_command = function(n) LazyVim.ui.bufremove(n) end,
+      right_mouse_command = function(n) Snacks.bufdelete(n) end,
       diagnostics = "nvim_lsp",
       always_show_bufferline = false,
       diagnostics_indicator = function(_, _, diag)
@@ -34,6 +33,9 @@ return {
           text = "Neo-tree",
           highlight = "Directory",
           text_align = "left",
+        },
+        {
+          filetype = "snacks_layout_box",
         },
       },
       ---@param opts bufferline.IconFetcherOpts
