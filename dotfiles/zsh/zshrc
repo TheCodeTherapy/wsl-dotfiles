@@ -1,5 +1,45 @@
 # if [ "$TMUX" = "" ]; then tmux; fi
-source "${HOME}"/.gptkey
+
+if [ -f "${HOME}"/.npmkey ]; then
+  source "${HOME}"/.npmkey
+fi
+
+if [ -f "${HOME}"/.gptkey ]; then
+  source "${HOME}"/.gptkey
+fi
+
+if [ -f "${HOME}"/.azure_marketplace ]; then
+  source "${HOME}"/.azure_marketplace
+fi
+
+EMSCRIPTENPATH="$HOME/.emsdk"
+export EMSCRIPTENPATH="$EMSCRIPTENPATH"
+export PATH=$PATH:$EMSCRIPTENPATH
+export PATH=$PATH:$EMSCRIPTENPATH/upstream/emscripten
+export QT_QPA_PLATFORMTHEME=qt6ct
+
+if [ -d "$EMSCRIPTENPATH" ]; then
+  source $EMSCRIPTENPATH/emsdk_env.sh > /dev/null 2>&1
+fi
+
+start_tmux() {
+  if [[ -n "$TMUX" && -z "$1" ]]; then
+    echo && neofetch
+    return
+  fi
+
+  if [[ -n "$TMUX" ]]; then
+    return
+  fi
+
+  if [[ "$TERM" != "xterm-ghostty" ]]; then
+    return
+  fi
+
+  if [[ -z "$TMUX" && -o interactive ]]; then
+    ~/ZDotfiles/scripts/startmux
+  fi
+}
 
 echo && echo && neofetch
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
