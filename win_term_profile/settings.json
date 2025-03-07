@@ -1,38 +1,24 @@
 {
   "$help": "https://aka.ms/terminal-documentation",
   "$schema": "https://aka.ms/terminal-profiles-schema",
-  "actions": [
+  "actions": [],
+  "copyFormatting": "none",
+  "copyOnSelect": false,
+  "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+  "keybindings": [
     {
-      "command": {
-        "action": "copy",
-        "singleLine": false
-      },
-      "id": "User.copy.644BA8F2",
+      "id": "Terminal.CopyToClipboard",
       "keys": "ctrl+c"
     },
     {
-      "command": "paste",
-      "id": "User.paste",
+      "id": "Terminal.PasteFromClipboard",
       "keys": "ctrl+v"
     },
     {
-      "command": "find",
-      "id": "User.find",
-      "keys": "ctrl+shift+f"
-    },
-    {
-      "command": {
-        "action": "splitPane",
-        "split": "auto",
-        "splitMode": "duplicate"
-      },
-      "id": "User.splitPane.A6751878",
+      "id": "Terminal.DuplicatePaneAuto",
       "keys": "alt+shift+d"
     }
   ],
-  "copyFormatting": "none",
-  "copyOnSelect": false,
-  "defaultProfile": "{2c4de342-38b7-51cf-b940-2309a097f518}",
   "newTabMenu": [
     {
       "type": "remainingProfiles"
@@ -41,25 +27,18 @@
   "profiles": {
     "defaults": {
       "font": {
-        "face": "NotoSansM Nerd Font Mono",
-        "size": 14
+        "face": "JetBrainsMono Nerd Font"
       },
-      "opacity": 95,
+      "opacity": 91,
       "scrollbarState": "hidden",
       "useAcrylic": true
     },
     "list": [
       {
-        "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-        "hidden": false,
-        "name": "PowerShell 7",
-        "source": "Windows.Terminal.PowershellCore"
-      },
-      {
         "commandline": "%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
         "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
         "hidden": false,
-        "name": "PowerShell 5"
+        "name": "Windows PowerShell"
       },
       {
         "commandline": "%SystemRoot%\\System32\\cmd.exe",
@@ -74,13 +53,13 @@
         "source": "Windows.Terminal.Azure"
       },
       {
-        "guid": "{d0828cc1-6909-5c33-b018-865fbd47425e}",
+        "guid": "{e200d64f-e485-5913-8a06-1ece71f7f774}",
         "hidden": false,
         "name": "Developer Command Prompt for VS 2022",
         "source": "Windows.Terminal.VisualStudio"
       },
       {
-        "guid": "{5a701194-95b7-5fb7-aa3c-847e6e410bc0}",
+        "guid": "{4e6d3659-08cc-576c-9b5b-fb02b1c57d23}",
         "hidden": false,
         "name": "Developer PowerShell for VS 2022",
         "source": "Windows.Terminal.VisualStudio"
@@ -92,10 +71,15 @@
         "source": "Git"
       },
       {
-        "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
-        "hidden": true,
-        "name": "Ubuntu",
-        "source": "Windows.Terminal.Wsl"
+        "colorScheme": "Tango Dark",
+        "font": {
+          "face": "JetBrainsMono Nerd Font Mono",
+          "size": 12
+        },
+        "guid": "{19897cfe-4fe6-5a1f-8bad-c52d191cb1db}",
+        "hidden": false,
+        "name": "WSL2 Ubuntu",
+        "source": "Microsoft.WSL"
       },
       {
         "guid": "{51855cb2-8cce-5362-8f54-464b92b32386}",
