@@ -5,10 +5,16 @@ source "$SCRIPT_DIR/_helpers.sh"
 source "$SCRIPT_DIR/_config.sh"
 
 install_neovim() {
-  if [[ -f /usr/bin/nvim ]]; then
-    print_info "Neovim is already installed ..."
+  if /usr/bin/nvim --version | grep "v0.11.4" >/dev/null 2>&1; then
+    print_info "Neovim v0.11.4 is already installed ..."
   else
-    print_info "Installing Neovim ..."
+    print_info "Installing Neovim v0.11.4 ..."
+
+    sudo apt-get remove --purge -y -qq neovim || handle_error "Failed to remove neovim."
+    sudo apt-get autoremove -y -qq || handle_error "Autoremove failed."
+    sudo apt-get autoclean -y -qq || handle_error "Autoclean failed."
+    sudo apt-get autoremove -y -qq || handle_error "Autoremove failed."
+    sudo apt-get autoclean -y -qq || handle_error "Autoclean failed."
 
     cd "$DOTDIR" ||
       handle_error "Failed to change directory to $DOTDIR"
@@ -16,16 +22,16 @@ install_neovim() {
     rm -rf neovim ||
       handle_error "Failed to remove Neovim directory"
 
-    git clone https://github.com/neovim/neovim ||
+    git clone --quiet https://github.com/neovim/neovim ||
       handle_error "Failed to clone repository"
 
     cd neovim || handle_error "Failed to enter Neovim directory"
 
-    git fetch --tags ||
+    git fetch --tags --quiet ||
       handle_error "Failed to fetch tags"
 
-    git checkout v0.10.1 ||
-      handle_error "Failed to checkout version v0.10.1"
+    git checkout v0.11.4 -q ||
+      handle_error "Failed to checkout version v0.11.4"
 
     make CMAKE_BUILD_TYPE=RelWithDebInfo -j"$(nproc)" ||
       handle_error "Failed to build Neovim"
@@ -35,7 +41,7 @@ install_neovim() {
     cpack -G DEB ||
       handle_error "Failed to create Neovim package"
 
-    sudo dpkg -i --force-all nvim-linux64.deb ||
+    sudo dpkg -i --force-all nvim-linux-x86_64.deb ||
       sudo DEBIAN_FRONTEND=noninteractive apt-get install -f -y -qq ||
       handle_error "Failed to install Neovim package"
 
